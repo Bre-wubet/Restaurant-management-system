@@ -1,29 +1,3 @@
-// {
-//   "development": {
-//     "username": "root",
-//     "password": null,
-//     "database": "database_development",
-//     "host": "127.0.0.1",
-//     "dialect": "mysql"
-//   },
-//   "test": {
-//     "username": "root",
-//     "password": null,
-//     "database": "database_test",
-//     "host": "127.0.0.1",
-//     "dialect": "mysql"
-//   },
-//   "production": {
-//     "username": "root",
-//     "password": null,
-//     "database": "database_production",
-//     "host": "127.0.0.1",
-//     "dialect": "mysql"
-//   }
-// }
-
-// config/config.js
-// config/config.js
 import dotenv from 'dotenv';
 dotenv.config();
 
@@ -34,7 +8,17 @@ export default {
     dialectOptions: {
       ssl: {
         require: true,
-        rejectUnauthorized: false, // ⚠️ use `true` in production with trusted CA
+        rejectUnauthorized: false, // ⚠️ set to true in production with trusted CA
+      },
+    },
+  },
+  test: {
+    url: process.env.DB_URI_TEST || '', // optionally separate test DB URI
+    dialect: 'postgres',
+    dialectOptions: {
+      ssl: {
+        require: true,
+        rejectUnauthorized: false,
       },
     },
   },
@@ -47,6 +31,5 @@ export default {
         rejectUnauthorized: false,
       },
     },
-  }
+  },
 };
-

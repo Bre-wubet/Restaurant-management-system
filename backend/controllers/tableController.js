@@ -1,30 +1,27 @@
 
-import db from '../models/index.js';
-const { Table, Order } = db;
+import Table from '../models/TableModel.js';
+
+//const { Table, Order } = db;
 
 // POST /tables — Create a new table
-export const createTable = async (req, res) => {
-  const { number, capacity } = req.body;
 
+export async function createTable(req, res) {
   try {
-    // Check if the table number already exists
-    const existingTable = await Table.findOne({ where: { number } });
+    const { tableNumber, capacity } = req.body;
+
+    const existingTable = await Table.findOne({ where: { tableNumber } });
     if (existingTable) {
-      return res.status(400).json({ message: `Table number ${number} already exists.` });
+      return res.status(400).json({ message: 'Table already exists' });
     }
 
-    const table = await Table.create({
-      number,
-      capacity,
-      status: 'available'
-    });
-
+    const table = await Table.create({ tableNumber, capacity });
     res.status(201).json(table);
   } catch (error) {
     console.error('Error creating table:', error);
-    res.status(500).json({ message: 'Internal server error while creating table.' });
+    res.status(500).json({ message: 'Internal Server Error' });
   }
-};
+}
+
 
 // GET /tables — Fetch all tables
 export const getAllTables = async (req, res) => {

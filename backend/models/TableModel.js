@@ -1,20 +1,28 @@
-export default (sequelize, DataTypes) => {
-  const Table = sequelize.define('Table', {
-    tableNumber: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      unique: true,
-    },
-    isAvailable: {
-      type: DataTypes.BOOLEAN,
-      defaultValue: true,
-    },
-  });
+// models/Table.js
+import { DataTypes } from 'sequelize';
+import sequelize from './index.js'; // adjust path to your db config
 
-  Table.associate = models => {
-    Table.hasMany(models.Order, { foreignKey: 'tableId' });
-    Table.hasMany(models.Reservation, { foreignKey: 'tableId' });
-  };
+const Table = sequelize.define('Table', {
+  id: {
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
+    primaryKey: true
+  },
+  tableNumber: {
+    type: DataTypes.INTEGER,
+    unique: true
+  },
+  capacity: {
+    type: DataTypes.INTEGER,
+    allowNull: false
+  },
+  isAvailable: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: true
+  }
+}, {
+  tableName: 'Tables',
+  timestamps: true
+});
 
-  return Table;
-};
+export default Table;

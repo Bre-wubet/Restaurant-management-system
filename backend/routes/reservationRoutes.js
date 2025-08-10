@@ -7,12 +7,15 @@ import {
   cancelReservation,
 } from '../controllers/reservationController.js';
 
-const router = express.Router();
+import { authorizeRoles, authenticateToken } from '../middleware/authMiddleware.js'
 
-router.post('/', createReservation);
-router.get('/', getAllReservations);
-router.get('/:id', getReservationById);
-router.put('/:id', updateReservation);
-router.delete('/:id', cancelReservation);
+const router = express.Router();
+router.use(authenticateToken);
+
+router.post('/', authorizeRoles('customer', 'staff', 'admin'), createReservation);
+router.get('/', authorizeRoles('staff', 'admin'), getAllReservations);
+router.get('/:id', authorizeRoles('staff', 'admin'), getReservationById);
+router.put('/:id', authorizeRoles('staff', 'admin'), updateReservation);
+router.delete('/:id', authorizeRoles('customer', 'staff', 'admin'), cancelReservation);
 
 export default router;

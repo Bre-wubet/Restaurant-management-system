@@ -9,6 +9,11 @@ export async function up(queryInterface, Sequelize) {
       type: Sequelize.INTEGER,
       unique: true
     },
+     capacity: {
+      type: Sequelize.INTEGER,
+      allowNull: false,
+      defaultValue: 4
+    },
     isAvailable: {
       type: Sequelize.BOOLEAN,
       defaultValue: true

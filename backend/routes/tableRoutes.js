@@ -7,12 +7,15 @@ import {
   deleteTable,
 } from '../controllers/tableController.js';
 
-const router = express.Router();
+import { authorizeRoles, authenticateToken } from '../middleware/authMiddleware.js'
 
-router.post('/', createTable);
-router.get('/', getAllTables);
-router.get('/:id', getTableById);
-router.patch('/:id/status', updateTableStatus);
-router.delete('/:id', deleteTable);
+const router = express.Router();
+router.use(authenticateToken);
+
+router.post('/', authorizeRoles('admin'), createTable);
+router.get('/', authorizeRoles('staff', 'admin'), getAllTables);
+router.get('/:id', authorizeRoles('staff', 'admin'), getTableById);
+router.patch('/:id/status', authorizeRoles('staff', 'admin'), updateTableStatus);
+router.delete('/:id', authorizeRoles('admin'), deleteTable);
 
 export default router;

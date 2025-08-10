@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import path from 'path';
 import fs from 'fs/promises';
 import { fileURLToPath } from 'url';
+import Table from './TableModel';
 
 dotenv.config();
 
@@ -14,7 +15,7 @@ const sequelize = new Sequelize(process.env.DB_URI, {
   logging: false,
 });
 
-const db = { sequelize, Sequelize };
+const db = { sequelize, Sequelize, Table };
 
 const files = await fs.readdir(__dirname);
 

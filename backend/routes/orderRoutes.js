@@ -6,13 +6,16 @@ import {
   updateOrderStatus,
   deleteOrder,
 } from '../controllers/orderController.js';
+import { authorizeRoles, authenticateToken } from '../middleware/authMiddleware.js'
 
 const router = express.Router();
 
-router.post('/', createOrder);
-router.get('/', getAllOrders);
-router.get('/:id', getOrderById);
-router.patch('/:id/status', updateOrderStatus);
-router.delete('/:id', deleteOrder);
+router.use(authenticateToken);
+
+router.post('/', authorizeRoles('customer', 'staff', 'admin'), createOrder);
+router.get('/', authorizeRoles('staff', 'admin'), getAllOrders);
+router.get('/:id', authorizeRoles('staff', 'admin'), getOrderById);
+router.patch('/:id/status', authorizeRoles('staff', 'admin'), updateOrderStatus);
+router.delete('/:id', authorizeRoles('admin'), deleteOrder);
 
 export default router;

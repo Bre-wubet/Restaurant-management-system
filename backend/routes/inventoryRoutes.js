@@ -8,12 +8,15 @@ import {
   deleteInventoryItem,
 } from '../controllers/inventoryController.js';
 
-const router = express.Router();
+import { authorizeRoles, authenticateToken } from '../middleware/authMiddleware.js'
 
-router.post('/', addInventoryItem);
-router.get('/', getAllInventoryItems);
-router.get('/:id', getInventoryItemById);
-router.put('/:id', updateInventoryItem);
-router.delete('/:id', deleteInventoryItem);
+const router = express.Router();
+router.use(authenticateToken);authorizeRoles('staff', 'admin'), 
+
+router.post('/', authorizeRoles('staff', 'admin'), addInventoryItem);
+router.get('/', authorizeRoles('staff', 'admin'), getAllInventoryItems);
+router.get('/:id', authorizeRoles('staff', 'admin'), getInventoryItemById);
+router.put('/:id', authorizeRoles('staff', 'admin'), updateInventoryItem);
+router.delete('/:id', authorizeRoles('admin'), deleteInventoryItem);
 
 export default router;
